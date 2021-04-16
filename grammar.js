@@ -86,6 +86,7 @@ module.exports = grammar(C, {
     class_specifier: $ => prec.right(seq(
       'class',
       optional($.ms_declspec_modifier),
+      repeat($.attribute),
       choice(
         field('name', $._class_name),
         seq(
@@ -114,6 +115,7 @@ module.exports = grammar(C, {
     struct_specifier: $ => prec.right(seq(
       'struct',
       optional($.ms_declspec_modifier),
+      repeat($.attribute),
       choice(
         field('name', $._class_name),
         seq(
