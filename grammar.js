@@ -9,6 +9,10 @@ const PREC = Object.assign(C.PREC, {
 module.exports = grammar(C, {
   name: 'cpp',
 
+  extras: ($, original) => original.concat([
+    $.doxygen
+  ]),
+
   externals: $ => [
     $.raw_string_literal
   ],
@@ -935,7 +939,20 @@ module.exports = grammar(C, {
       repeat1(choice($.raw_string_literal, $.string_literal))
     ),
 
-    _namespace_identifier: $ => alias($.identifier, $.namespace_identifier)
+    _namespace_identifier: $ => alias($.identifier, $.namespace_identifier),
+	
+	comment: $ => token(choice(
+      seq('//', /[^\/](\\(.|\r?\n)|[^\\\n])*/),
+      seq(
+        '/*',
+        /[^*]*\*+([^/*][^*]*\*+)*/,
+        '/'
+      )
+    )),
+	
+	doxygen: $ => token(
+      seq('///', /(\\(.|\r?\n)|[^\\\n])*/)
+    )
   }
 });
 

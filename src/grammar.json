@@ -7188,7 +7188,7 @@
               },
               {
                 "type": "PATTERN",
-                "value": "(\\\\(.|\\r?\\n)|[^\\\\\\n])*"
+                "value": "[^\\/](\\\\(.|\\r?\\n)|[^\\\\\\n])*"
               }
             ]
           },
@@ -10408,6 +10408,22 @@
       },
       "named": true,
       "value": "namespace_identifier"
+    },
+    "doxygen": {
+      "type": "TOKEN",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "///"
+          },
+          {
+            "type": "PATTERN",
+            "value": "(\\\\(.|\\r?\\n)|[^\\\\\\n])*"
+          }
+        ]
+      }
     }
   },
   "extras": [
@@ -10418,6 +10434,10 @@
     {
       "type": "SYMBOL",
       "name": "comment"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "doxygen"
     }
   ],
   "conflicts": [
