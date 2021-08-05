@@ -3429,7 +3429,7 @@
       }
     },
     "enum_specifier": {
-      "type": "PREC_LEFT",
+      "type": "PREC_RIGHT",
       "value": 0,
       "content": {
         "type": "SEQ",
@@ -7527,7 +7527,7 @@
       ]
     },
     "_enum_base_clause": {
-      "type": "PREC_LEFT",
+      "type": "PREC_RIGHT",
       "value": 0,
       "content": {
         "type": "SEQ",

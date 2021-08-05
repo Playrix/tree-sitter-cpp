@@ -161,7 +161,7 @@ module.exports = grammar(C, {
       ))
     ),
 
-    enum_specifier: $ => prec.left(seq(
+    enum_specifier: $ => prec.right(seq(
       'enum',
       optional(choice('class', 'struct')),
       choice(
@@ -174,7 +174,7 @@ module.exports = grammar(C, {
       )
     )),
 
-    _enum_base_clause: $ => prec.left(seq(
+    _enum_base_clause: $ => prec.right(seq(
       ':',
       field('base', choice($.scoped_type_identifier, $._type_identifier, $.sized_type_specifier))
     )),

@@ -441,7 +441,8 @@ class [[nodiscard]] Class {};
     (storage_class_specifier)
     (primitive_type)
     (function_declarator (identifier) (parameter_list)))
-  (struct_specifier (type_identifier) (field_declaration_list)))
+  (struct_specifier (attribute (identifier)) (type_identifier) (field_declaration_list))
+  (class_specifier (attribute (identifier)) (type_identifier) (field_declaration_list)))
 
 =========================================
 Operator overload declarations

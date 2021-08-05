@@ -3,3 +3,7 @@ node_modules
 build
 package-lock.json
 /target/
+parser.exp
+parser.lib
+parser.obj
+scanner.obj
