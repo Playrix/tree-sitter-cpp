@@ -145,6 +145,12 @@ module.exports = grammar(C, {
     virtual_function_specifier: $ => choice(
       'virtual'
     ),
+	
+	alignas_specifier: $ => seq(
+      'alignas(',
+	  choice($._expression, $._type_specifier),
+	  ')',
+    ),
 
     explicit_function_specifier: $ => choice(
       'explicit',
@@ -371,7 +377,7 @@ module.exports = grammar(C, {
 
     field_declaration: $ => seq(
       repeat($.attribute),
-      optional($.virtual_function_specifier),
+      optional(choice($.virtual_function_specifier, $.alignas_specifier)),
       $._declaration_specifiers,
       commaSep(field('declarator', $._field_declarator)),
       optional(choice(
@@ -941,18 +947,22 @@ module.exports = grammar(C, {
 
     _namespace_identifier: $ => alias($.identifier, $.namespace_identifier),
 	
+	doxygen: $ => token(prec(1, choice(
+      seq('///', /(\\(.|\r?\n)|[^\\\n])*/),
+	  seq('/**',
+        /[^*]*\*+([^/*][^*]*\*+)*/,
+        '/'
+	  )
+    ))),
+	
 	comment: $ => token(choice(
-      seq('//', /[^\/](\\(.|\r?\n)|[^\\\n])*/),
+      seq('//', /(\\(.|\r?\n)|[^\\\n])*/),
       seq(
         '/*',
         /[^*]*\*+([^/*][^*]*\*+)*/,
         '/'
       )
     )),
-	
-	doxygen: $ => token(
-      seq('///', /(\\(.|\r?\n)|[^\\\n])*/)
-    )
   }
 });
 

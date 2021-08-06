@@ -3914,8 +3914,17 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "SYMBOL",
-              "name": "virtual_function_specifier"
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "virtual_function_specifier"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "alignas_specifier"
+                }
+              ]
             },
             {
               "type": "BLANK"
@@ -7188,7 +7197,7 @@
               },
               {
                 "type": "PATTERN",
-                "value": "[^\\/](\\\\(.|\\r?\\n)|[^\\\\\\n])*"
+                "value": "(\\\\(.|\\r?\\n)|[^\\\\\\n])*"
               }
             ]
           },
@@ -7371,6 +7380,32 @@
         {
           "type": "STRING",
           "value": "virtual"
+        }
+      ]
+    },
+    "alignas_specifier": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "alignas("
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_expression"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "_type_specifier"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": ")"
         }
       ]
     },
@@ -10412,17 +10447,43 @@
     "doxygen": {
       "type": "TOKEN",
       "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "STRING",
-            "value": "///"
-          },
-          {
-            "type": "PATTERN",
-            "value": "(\\\\(.|\\r?\\n)|[^\\\\\\n])*"
-          }
-        ]
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "///"
+                },
+                {
+                  "type": "PATTERN",
+                  "value": "(\\\\(.|\\r?\\n)|[^\\\\\\n])*"
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "/**"
+                },
+                {
+                  "type": "PATTERN",
+                  "value": "[^*]*\\*+([^/*][^*]*\\*+)*"
+                },
+                {
+                  "type": "STRING",
+                  "value": "/"
+                }
+              ]
+            }
+          ]
+        }
       }
     }
   },
