@@ -359,7 +359,7 @@ module.exports = grammar(C, {
       optional('...')
     )),
 
-    _field_declaration_list_item: ($, original) => choice(
+    _field_declaration_list_item: ($, original) => seq(choice(
       original,
       $.template_declaration,
       alias($.inline_method_definition, $.function_definition),
@@ -373,7 +373,7 @@ module.exports = grammar(C, {
       $.using_declaration,
       $.type_definition,
       $.static_assert_declaration
-    ),
+    ), repeat(';')),
 
     field_declaration: $ => seq(
       repeat($.attribute),
@@ -394,7 +394,7 @@ module.exports = grammar(C, {
       $._declaration_specifiers,
       field('declarator', $._field_declarator),
       choice(
-        field('body', $.compound_statement),
+        field('body', $.compound_statement), 
         $.default_method_clause,
         $.delete_method_clause
       )
@@ -414,7 +414,7 @@ module.exports = grammar(C, {
       optional($._constructor_specifiers),
       field('declarator', $.operator_cast),
       choice(
-        field('body', $.compound_statement),
+        field('body', $.compound_statement), 
         $.default_method_clause,
         $.delete_method_clause
       )
@@ -887,6 +887,7 @@ module.exports = grammar(C, {
         $.scoped_namespace_identifier
       ))),
       '::',
+	  optional('template'),
       field('name', choice(
         $.identifier,
         $.operator_name,
@@ -901,6 +902,7 @@ module.exports = grammar(C, {
         $.scoped_namespace_identifier
       ))),
       '::',
+	  optional('template'),
       field('name', $._type_identifier)
     )),
 
@@ -921,6 +923,7 @@ module.exports = grammar(C, {
 
     operator_name: $ => token(seq(
       'operator',
+	  /[\t ]*/,
       choice(
         '+', '-', '*', '/', '%',
         '^', '&', '|', '~',
