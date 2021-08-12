@@ -936,7 +936,8 @@ module.exports = grammar(C, {
         ',',
         '->*',
         '->',
-        '()', '[]'
+        '()', '[]',
+        seq(choice('new', 'delete'),  /[\t ]*/, optional('[]')),
       )
     )),
 
