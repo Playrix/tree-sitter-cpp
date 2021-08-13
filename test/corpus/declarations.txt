@@ -1121,3 +1121,62 @@ inline int h() { }
       declarator: (identifier)
       parameters: (parameter_list))
     body: (compound_statement)))
+
+==========================================
+Field attributes
+==========================================
+
+class X
+{
+	int x __attribute__(()) = 4;
+	int y : 2 __attribute__(());
+	int z __attribute__(());
+	__attribute__(()) int __attribute__(()) t __attribute__(()) = 42;
+	__attribute__(()) int __attribute__(()) mm : 3 __attribute__(());
+};
+
+---
+
+(translation_unit
+  (class_specifier
+    name: (type_identifier)
+    body: (field_declaration_list
+      (field_declaration
+        type: (primitive_type)
+        declarator: (field_identifier)
+        declarator: (attribute_specifier
+          (argument_list))
+        default_value: (number_literal))
+      (field_declaration
+        type: (primitive_type)
+        declarator: (field_identifier)
+        (bitfield_clause
+          (number_literal))
+        (attribute_specifier
+          (argument_list)))
+      (field_declaration
+        type: (primitive_type)
+        declarator: (field_identifier)
+        declarator: (attribute_specifier
+          (argument_list)))
+      (field_declaration
+        (attribute_specifier
+          (argument_list))
+        type: (primitive_type)
+        (attribute_specifier
+          (argument_list))
+        declarator: (field_identifier)
+        declarator: (attribute_specifier
+          (argument_list))
+        default_value: (number_literal))
+      (field_declaration
+        (attribute_specifier
+          (argument_list))
+        type: (primitive_type)
+        (attribute_specifier
+          (argument_list))
+        declarator: (field_identifier)
+        (bitfield_clause
+          (number_literal))
+        (attribute_specifier
+          (argument_list))))))

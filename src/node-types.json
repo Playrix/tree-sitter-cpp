@@ -1778,6 +1778,10 @@
           {
             "type": "_field_declarator",
             "named": true
+          },
+          {
+            "type": "attribute_specifier",
+            "named": true
           }
         ]
       },

@@ -379,9 +379,9 @@ module.exports = grammar(C, {
       repeat($.attribute),
       optional(choice($.virtual_function_specifier, $.alignas_specifier)),
       $._declaration_specifiers,
-      commaSep(field('declarator', $._field_declarator)),
+      commaSep(field('declarator', seq($._field_declarator, optional($.attribute_specifier)))),
       optional(choice(
-        $.bitfield_clause,
+		seq($.bitfield_clause, optional($.attribute_specifier)),
         field('default_value', $.initializer_list),
         seq('=', field('default_value', choice($._expression, $.initializer_list)))
       )),
