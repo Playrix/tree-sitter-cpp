@@ -31,6 +31,7 @@ module.exports = grammar(C, {
     [$.parameter_list, $.argument_list],
     [$._type_specifier, $.call_expression],
     [$._declaration_specifiers, $.operator_cast_declaration, $.operator_cast_definition, $.constructor_or_destructor_definition],
+	[$._declaration_specifiers, $.field_declaration, $.inline_method_definition, $.operator_cast_declaration, $.operator_cast_definition, $.constructor_or_destructor_definition, $.constructor_or_destructor_declaration],
     [$._declaration_specifiers, $._constructor_specifiers],
   ]),
 
@@ -89,8 +90,7 @@ module.exports = grammar(C, {
     // with an associativity.
     class_specifier: $ => prec.right(seq(
       'class',
-      optional($.ms_declspec_modifier),
-      repeat($.attribute),
+      repeat($._class_attribute),
       choice(
         field('name', $._class_name),
         seq(
@@ -104,7 +104,7 @@ module.exports = grammar(C, {
 
     union_specifier: $ => prec.right(seq(
       'union',
-      optional($.ms_declspec_modifier),
+      repeat($._class_attribute),
       choice(
         field('name', $._class_name),
         seq(
@@ -118,8 +118,7 @@ module.exports = grammar(C, {
 
     struct_specifier: $ => prec.right(seq(
       'struct',
-      optional($.ms_declspec_modifier),
-      repeat($.attribute),
+      repeat($._class_attribute),
       choice(
         field('name', $._class_name),
         seq(
@@ -146,9 +145,16 @@ module.exports = grammar(C, {
       'virtual'
     ),
 	
+	_class_attribute: $ => prec.right(choice(
+      $.alignas_specifier,
+	  $.ms_declspec_modifier,
+	  $.attribute
+    )),
+	
 	alignas_specifier: $ => seq(
-      'alignas(',
-	  choice($._expression, $._type_specifier),
+      'alignas',
+	  '(',
+	  choice($._expression, $._type_specifier, $.type_parameter_pack_expansion),
 	  ')',
     ),
 
@@ -203,14 +209,19 @@ module.exports = grammar(C, {
 
     // Declarations
 
-    function_definition: ($, original) => seq(
-      repeat($.attribute),
-      original
-    ),
+	_declaration_specifiers_list: $ => choice(
+		$.storage_class_specifier,
+        $.type_qualifier,
+        $.attribute_specifier,
+        $.ms_declspec_modifier,
+		$.alignas_specifier,
+		$.attribute
+	),
 
-    declaration: ($, original) => seq(
-      repeat($.attribute),
-      original
+    _declaration_specifiers: ($, original) => seq(
+      repeat($._declaration_specifiers_list),
+      field('type', $._type_specifier),
+      repeat($._declaration_specifiers_list)
     ),
 
     template_declaration: $ => seq(
@@ -248,11 +259,6 @@ module.exports = grammar(C, {
         $.template_template_parameter_declaration
       )),
       alias(token(prec(1, '>')), '>')
-    ),
-
-    parameter_declaration: ($, original) => seq(
-      repeat($.attribute),
-      original
     ),
 
     type_parameter_declaration: $ => prec(1, seq(
@@ -376,8 +382,7 @@ module.exports = grammar(C, {
     ), repeat(';')),
 
     field_declaration: $ => seq(
-      repeat($.attribute),
-      optional(choice($.virtual_function_specifier, $.alignas_specifier)),
+	  optional(seq(repeat($._declaration_specifiers_list), $.virtual_function_specifier)),
       $._declaration_specifiers,
       commaSep(field('declarator', seq($._field_declarator, optional($.attribute_specifier)))),
       optional(choice(
@@ -389,8 +394,7 @@ module.exports = grammar(C, {
     ),
 
     inline_method_definition: $ => seq(
-      repeat($.attribute),
-      optional($.virtual_function_specifier),
+      optional(seq(repeat($._declaration_specifiers_list), $.virtual_function_specifier)),
       $._declaration_specifiers,
       field('declarator', $._field_declarator),
       choice(
@@ -402,9 +406,7 @@ module.exports = grammar(C, {
 
     _constructor_specifiers: $ => repeat1(
       prec.right(choice(
-        $.storage_class_specifier,
-        $.type_qualifier,
-        $.attribute_specifier,
+        $._declaration_specifiers_list,
         $.virtual_function_specifier,
         $.explicit_function_specifier
       ))
@@ -757,7 +759,8 @@ module.exports = grammar(C, {
       $.parameter_pack_expansion,
       $.nullptr,
       $.this,
-      $.raw_string_literal
+      $.raw_string_literal,
+      $.alignof_expression
     ),
 
     call_expression: ($, original) => choice(original, seq(
@@ -845,6 +848,11 @@ module.exports = grammar(C, {
         ')'
       ),
     ),
+	
+	alignof_expression: $ => prec(PREC.SIZEOF, seq(
+      'alignof',
+      seq('(', field('type', $.type_descriptor), ')')
+    )),
 
     argument_list: $ => seq(
       '(',

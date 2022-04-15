@@ -80,6 +80,10 @@
     "named": true,
     "subtypes": [
       {
+        "type": "alignof_expression",
+        "named": true
+      },
+      {
         "type": "assignment_expression",
         "named": true
       },
@@ -579,8 +583,28 @@
         {
           "type": "_type_specifier",
           "named": true
+        },
+        {
+          "type": "type_parameter_pack_expansion",
+          "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "alignof_expression",
+    "named": true,
+    "fields": {
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_descriptor",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1102,6 +1126,10 @@
       "required": false,
       "types": [
         {
+          "type": "alignas_specifier",
+          "named": true
+        },
+        {
           "type": "attribute",
           "named": true
         },
@@ -1430,6 +1458,10 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "alignas_specifier",
+          "named": true
+        },
         {
           "type": "attribute",
           "named": true
@@ -2065,6 +2097,14 @@
       "required": false,
       "types": [
         {
+          "type": "alignas_specifier",
+          "named": true
+        },
+        {
+          "type": "attribute",
+          "named": true
+        },
+        {
           "type": "attribute_specifier",
           "named": true
         },
@@ -2283,6 +2323,10 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "alignas_specifier",
+          "named": true
+        },
         {
           "type": "attribute",
           "named": true
@@ -2848,6 +2892,14 @@
       "required": false,
       "types": [
         {
+          "type": "alignas_specifier",
+          "named": true
+        },
+        {
+          "type": "attribute",
+          "named": true
+        },
+        {
           "type": "attribute_specifier",
           "named": true
         },
@@ -2905,6 +2957,14 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "alignas_specifier",
+          "named": true
+        },
+        {
+          "type": "attribute",
+          "named": true
+        },
         {
           "type": "attribute_specifier",
           "named": true
@@ -2983,6 +3043,10 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "alignas_specifier",
+          "named": true
+        },
         {
           "type": "attribute",
           "named": true
@@ -4160,6 +4224,10 @@
       "required": false,
       "types": [
         {
+          "type": "alignas_specifier",
+          "named": true
+        },
+        {
           "type": "attribute",
           "named": true
         },
@@ -4380,6 +4448,14 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "alignas_specifier",
+          "named": true
+        },
+        {
+          "type": "attribute",
+          "named": true
+        },
         {
           "type": "attribute_specifier",
           "named": true
@@ -4782,6 +4858,22 @@
     }
   },
   {
+    "type": "type_parameter_pack_expansion",
+    "named": true,
+    "fields": {
+      "pattern": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_descriptor",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "type_qualifier",
     "named": true,
     "fields": {}
@@ -4865,6 +4957,14 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "alignas_specifier",
+          "named": true
+        },
+        {
+          "type": "attribute",
+          "named": true
+        },
         {
           "type": "base_class_clause",
           "named": true
@@ -4977,6 +5077,14 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "alignas_specifier",
+          "named": true
+        },
+        {
+          "type": "attribute",
+          "named": true
+        },
         {
           "type": "attribute_specifier",
           "named": true
@@ -5328,7 +5436,11 @@
     "named": false
   },
   {
-    "type": "alignas(",
+    "type": "alignas",
+    "named": false
+  },
+  {
+    "type": "alignof",
     "named": false
   },
   {
